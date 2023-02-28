@@ -1,0 +1,36 @@
+---
+- hosts: webserver
+  become: true
+  vars_files:
+    - secrets.yml
+  vars:
+    app_port: 5000
+    db_name: "votes"
+  tasks:
+  - name: Install Docker and Docker Compose
+    apt:
+      name: ['docker.io', 'docker-compose']
+      update_cache: yes
+      state: latest
+
+  - name: Configure Docker Compose Environment
+    copy:
+      content: |
+        DB_PASSWORD={{ db_password }}
+        APP_PORT={{ app_port }}
+        DB_NAME={{ db_name }}
+        DB_USER={{ db_username }}
+      dest: /etc/environment
+
+  - name: Restart systemd daemon
+    systemd:
+      daemon_reload: yes
+      state: restarted
+
+  - name: Deploy Voting App
+    docker_compose:
+      project_name: voting-app
+      docker_compose_path: /voting-app/docker-compose.yml
+      build: yes
+      pull: yes
+      recreate: yes
