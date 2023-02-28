@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Cats vs Dogs</title>
+</head>
+
+<body>
+  <h1>Results</h1>
+  <table>
+    <tr>
+      <th>Animal</th>
+      <th>Count</th>
+    </tr>
+    {% for result in results %}
+    <tr>
+      <td>{{ result[0] }}</td>
+      <td>{{ result[1] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <a href="/">Back to voting</a>
+</body>
+
+</html>
